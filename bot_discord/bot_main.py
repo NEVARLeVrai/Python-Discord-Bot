@@ -80,7 +80,10 @@ async def stop(ctx):
 try:
     asyncio.run(load())
     print("")
-    client.run("")
+    with open("C:/Users/danie/Documents/VSC/Bot_Discord_Folder/token.txt", "r") as f:
+        token = f.read().strip()
+    client.run(token)
+
 except Exception as e:
     print("Arrêté impossible de lancer le bot")
     traceback.print_exc()
