@@ -210,7 +210,7 @@ class utility(commands.Cog):
     async def tts_error(self, ctx, error):
         await ctx.message.delete()
         if isinstance(error, commands.MissingRequiredArgument):
-            embed2 = discord.Embed(title= "TTS Erreur", description="Syntaxe : =tts [langue] [volume expl= 3.0] <texte>", color=discord.Color.yellow())
+            embed2 = discord.Embed(title= "TTS Erreur", description="Syntaxe : =tts [langue] [volume ex= 3.0] <texte>", color=discord.Color.yellow())
             embed2.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
             embed2.set_footer(text=Help.version1)
             await ctx.send(embed = embed2, delete_after=10)        

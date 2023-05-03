@@ -3,11 +3,11 @@ from discord.ext import commands
 import io
 import traceback
 
-version1="Bot V.2404-23.beta"
-version2 ="`Optimisation, vkick command, update helps command`"
+version1="Bot V.0305-23.beta"
+version2 ="`test`"
 
-version3="Bot V.1504-23.beta"
-version4 ="`Optimisation`"
+version3="Bot V.2404-23.beta"
+version4 ="`Optimisation, vkick command, update helps command`"
 
 class Help(commands.Cog):
 
@@ -84,6 +84,7 @@ class Help(commands.Cog):
         embed.add_field(name="", value="")
         embed.add_field(name="Preview Version", value="Bot V.0103-23.alpha")
         embed.add_field(name="Update Logs", value="`Optimisation, First update and alot of new command`")
+        embed.add_field(name="Date format", value="`MM/DD/YY`")
         with open("./Autres/hilaire.png", "rb") as f:
             image_data = f.read()
         embed.set_thumbnail(url="attachment://hilaire.png")

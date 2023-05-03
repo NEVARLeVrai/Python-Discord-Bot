@@ -28,7 +28,6 @@ class Soundboard(commands.Cog):
     @commands.command()
     async def srandom(self, ctx):
         await ctx.message.delete()
-        """Commande pour jouer un son aléatoire toutes les 10 minutes."""
         if not ctx.author.voice:
             embed16 = discord.Embed(title= "SoundBoard Random Erreur", description="Vous devez être connecté à un salon vocal pour utiliser cette commande.", color=discord.Color.red())
             embed16.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
@@ -75,7 +74,7 @@ class Soundboard(commands.Cog):
             if self.voice_client and self.voice_client.is_connected():
                 if not self.voice_client.is_playing():
                     if self.random_task and not self.random_task.done():
-                        wait_time = random.randint(1, 5) * 60  # choisir un temps aléatoire entre 1 et 10 minutes
+                        wait_time = random.randint(1, 5) * 60  # choisir un temps aléatoire entre 1 et 5 minutes
                         print(f"Attente de {wait_time // 60} minutes")
                         await asyncio.sleep(wait_time)
                         sound_num = random.randint(1, len(self.sound_files))
@@ -99,7 +98,6 @@ class Soundboard(commands.Cog):
     @commands.command()
     async def srandomstop(self, ctx):
         await ctx.message.delete()
-        """Commande pour arrêter la lecture aléatoire."""
         if self.random_task and not self.random_task.done():
             self.random_task.cancel()
             embed = discord.Embed(title="SoundBoard Random Stop", description="Arrêt de la lecture aléatoire réussi", color=discord.Color.red())
@@ -117,7 +115,6 @@ class Soundboard(commands.Cog):
     @commands.command()
     async def sjoin(self, ctx):
         await ctx.message.delete()
-        """Commande pour faire rejoindre le bot dans le salon vocal."""
         if not ctx.author.voice:
             embed1 = discord.Embed(title= "SoundBoard Join Erreur", description="Vous devez être connecté à un salon vocal pour utiliser cette commande.", color=discord.Color.yellow())
             embed1.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)

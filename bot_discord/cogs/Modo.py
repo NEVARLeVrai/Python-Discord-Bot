@@ -9,7 +9,7 @@ import requests
 class Modo(commands.Cog):
     def __init__(self, client):
         self.client = client    
-        self.webhook_url = "https://discord.com/api/webhooks/1097171152079704205/J0-Ib9GBFpGhRedu1Qpblot6rAxoHeZGF-tvgCGyazdp_XIeaTyqsAO2lYsL7yEdg3Dv" # Remplacez WEBHOOK_ID et WEBHOOK_TOKEN par les valeurs de votre webhook
+        self.webhook_url = "https://discord.com/api/webhooks/1097171152079704205/J0-Ib9GBFpGhRedu1Qpblot6rAxoHeZGF-tvgCGyazdp_XIeaTyqsAO2lYsL7yEdg3Dv" # Remplacez WEBHOOK
 
 
     @commands.Cog.listener()

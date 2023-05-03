@@ -50,7 +50,7 @@ async def on_ready():
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        embed = discord.Embed(title= "Commande inconnue", description="Utilisez **=help** pour la liste des commandes", color=discord.Color.red())
+        embed = discord.Embed(title= "Commande inconnue", description="Utilisez **=helps** pour la liste des commandes", color=discord.Color.red())
         embed.set_image(url=ctx.guild.icon)
         embed.set_footer(text=Help.version1)
         await ctx.send(embed=embed, delete_after=10)
