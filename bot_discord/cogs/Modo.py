@@ -11,11 +11,9 @@ class Modo(commands.Cog):
         self.client = client    
         self.webhook_url = "https://discord.com/api/webhooks/1097171152079704205/J0-Ib9GBFpGhRedu1Qpblot6rAxoHeZGF-tvgCGyazdp_XIeaTyqsAO2lYsL7yEdg3Dv" # Remplacez WEBHOOK
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         print("Modo.py is ready")
-
 
     @commands.command(name="report")
     async def report(self, ctx, *, message: str):
@@ -39,9 +37,7 @@ class Modo(commands.Cog):
             embedc1.add_field(name="",value="Veuillez réessayer plus tard.", inline=False)
             embedc1.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
             embedc1.set_footer(text=Help.version1)
-            await ctx.send(embed=embedc1, delete_after=5)
-        
-        
+            await ctx.send(embed=embedc1, delete_after=5)       
         
     @commands.command(aliases=["prune"])
     @commands.has_permissions(manage_messages=True)
@@ -54,7 +50,6 @@ class Modo(commands.Cog):
         await ctx.channel.purge(limit=amount+1)
         await asyncio.sleep(1) # Attendre une seconde entre chaque envoi de message
         await ctx.send(f"**{amount}** messages ont été supprimés.", delete_after=10)
-
         
     @commands.command()
     @commands.has_permissions(kick_members=True)
@@ -91,7 +86,6 @@ class Modo(commands.Cog):
         conf_embed.set_footer(text=Help.version1)
         
         await ctx.send(embed=conf_embed)
-
         
     @commands.command(name="unban")
     @commands.guild_only()
@@ -124,9 +118,6 @@ class Modo(commands.Cog):
             await ctx.send(message)
             sent_messages += 1
             await asyncio.sleep(0.5) # Attendre une seconde entre chaque envoi de message
-            
-
-        
-        
+                  
 async def setup(client):
     await client.add_cog(Modo(client))

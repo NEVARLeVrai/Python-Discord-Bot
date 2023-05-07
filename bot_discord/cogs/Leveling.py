@@ -17,8 +17,7 @@ class Leveling(commands.Cog):
         # Chargement du fichier JSON qui stocke les données de niveau
         with open('./Autres/levels.json', 'r') as f:
             self.levels = json.load(f)
-
-    
+ 
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.author.bot or not self.is_leveling_enabled:
@@ -51,7 +50,6 @@ class Leveling(commands.Cog):
         with open('./Autres/levels.json', 'w') as f:
             json.dump(self.levels, f)
 
-
     # Commande pour afficher le niveau de l'utilisateur
     @commands.command(aliases=["lvl"])
     async def level(self, ctx, member: discord.Member = None):
@@ -80,7 +78,6 @@ class Leveling(commands.Cog):
         embed.set_footer(text=Help.version1)
 
         await ctx.send(embed=embed)
-
 
     @commands.command(aliases=["rsl"])
     async def resetlevel(self, ctx):
@@ -119,7 +116,6 @@ class Leveling(commands.Cog):
             embed.set_footer(text=Help.version1)
             await ctx.send(embed=embed, delete_after= 5)
 
-
     @commands.command(aliases=["lvls"])
     @commands.has_permissions(administrator=True)
     async def levelsettings(self, ctx):
@@ -136,8 +132,6 @@ class Leveling(commands.Cog):
             embed.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
             embed.set_footer(text=Help.version1)
             await ctx.send(embed=embed, delete_after= 10)
-       
-    
         
 async def setup(bot):
     await bot.add_cog(Leveling(bot))

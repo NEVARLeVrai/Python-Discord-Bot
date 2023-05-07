@@ -28,9 +28,6 @@ class Test(commands.Cog):
     
         else:
             await ctx.send(f"Aucun salon avec le nom **{name}** trouvé.")
-            
-
-
 
 async def setup(client):
     await client.add_cog(Test(client))

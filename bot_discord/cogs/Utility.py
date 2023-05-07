@@ -6,7 +6,6 @@ import asyncio
 from cogs import Help
 import traceback
 
-
 class utility(commands.Cog):
     def __init__(self, client):
         self.client = client
@@ -32,14 +31,9 @@ class utility(commands.Cog):
             while vc.is_playing():
                 await asyncio.sleep(1)
 
-
-
     @commands.Cog.listener()
     async def on_ready(self):
         print("Utility.py is ready")
-
-
-
 
     @commands.command()
     async def tts(self, ctx, lang="fr",vol="3.0" , *, text):
@@ -70,70 +64,6 @@ class utility(commands.Cog):
         embed3.set_footer(text=Help.version1)
         await ctx.send(embed=embed3, delete_after=5)
 
-
-
-
-
-
-
-    
-    @commands.command(aliases=["8ball"])
-    async def magicball(self, ctx, * ,question):
-        await ctx.message.delete()
-        responses=['Comme je le vois oui.',
-                  'Oui.',
-                  'Positif',
-                  'De mon point de vue, oui',
-                  'Convaincu.',
-                  'Le plus probable.',
-                  'De grandes chances',
-                  'Non.',
-                  'Négatif.',
-                  'Pas convaincu.',
-                  'Peut-être.',
-                  'Pas certain',
-                  'Peut-être',
-                  'Je ne peux pas prédire maintenant.',
-                  'Je suis trop paresseux pour prédire.',
-                  'Je suis fatigué. *continue à dormir*']
-        response = random.choice(responses)
-        embed=discord.Embed(title="La Boule Magique 8 à parlé!", color=discord.Color.purple())
-        embed.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
-        embed.add_field(name='Question: ', value=f'{question}')
-        embed.add_field(name='Réponse: ', value=f'{response}')
-        embed.set_footer(text=Help.version1)
-        with open("./Autres/8ball.png", "rb") as f:
-            image_data = f.read()
-        embed.set_thumbnail(url="attachment://8ball.png")
-        await ctx.send(embed=embed, file=discord.File(io.BytesIO(image_data), "8ball.png"))
-
-            
-    @commands.command()
-    async def hilaire(self, ctx):
-        await ctx.message.delete()
-        responses = ["le protocole RS232",
-                "FTTH",
-                "Bit de Start",
-                "Bit de parité",
-                "Sinusoïdale",
-                "RJ45",
-                "Trop dbruiiiit!!!!",
-                "Raphaël les écouteurs",
-                "Can le téléphone",
-                "JoOoAnnY",
-                "Le théorème de demorgan"]
-        responses = random.choice(responses)
-        embed=discord.Embed(title="Wiliam Hilaire à parlé!", color=discord.Color.purple())
-        embed.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
-        embed.add_field(name='Hilaire à dit: ', value=f'{responses}')
-        embed.set_footer(text=Help.version1)
-        with open("./Autres/hilaire.png", "rb") as f:
-            image_data = f.read()
-        embed.set_thumbnail(url="attachment://hilaire.png")
-        await ctx.send(embed=embed, file=discord.File(io.BytesIO(image_data), "hilaire.png"))
-    
-
-            
     @commands.command(aliases=["repeat"])
     async def say(self, ctx, *, message,):
         await ctx.message.delete()
@@ -205,18 +135,59 @@ class utility(commands.Cog):
         except Exception as e:
             traceback.print_exc()
 
-           
-    @tts.error
-    async def tts_error(self, ctx, error):
+    @commands.command(aliases=["8ball"])
+    async def magicball(self, ctx, * ,question):
         await ctx.message.delete()
-        if isinstance(error, commands.MissingRequiredArgument):
-            embed2 = discord.Embed(title= "TTS Erreur", description="Syntaxe : =tts [langue] [volume ex= 3.0] <texte>", color=discord.Color.yellow())
-            embed2.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
-            embed2.set_footer(text=Help.version1)
-            await ctx.send(embed = embed2, delete_after=10)        
-            
-    
-
+        responses=['Comme je le vois oui.',
+                  'Oui.',
+                  'Positif',
+                  'De mon point de vue, oui',
+                  'Convaincu.',
+                  'Le plus probable.',
+                  'De grandes chances',
+                  'Non.',
+                  'Négatif.',
+                  'Pas convaincu.',
+                  'Peut-être.',
+                  'Pas certain',
+                  'Peut-être',
+                  'Je ne peux pas prédire maintenant.',
+                  'Je suis trop paresseux pour prédire.',
+                  'Je suis fatigué. *continue à dormir*']
+        response = random.choice(responses)
+        embed=discord.Embed(title="La Boule Magique 8 à parlé!", color=discord.Color.purple())
+        embed.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+        embed.add_field(name='Question: ', value=f'{question}')
+        embed.add_field(name='Réponse: ', value=f'{response}')
+        embed.set_footer(text=Help.version1)
+        with open("./Autres/8ball.png", "rb") as f:
+            image_data = f.read()
+        embed.set_thumbnail(url="attachment://8ball.png")
+        await ctx.send(embed=embed, file=discord.File(io.BytesIO(image_data), "8ball.png"))
+        
+    @commands.command()
+    async def hilaire(self, ctx):
+        await ctx.message.delete()
+        responses = ["le protocole RS232",
+                "FTTH",
+                "Bit de Start",
+                "Bit de parité",
+                "Sinusoïdale",
+                "RJ45",
+                "Trop dbruiiiit!!!!",
+                "Raphaël les écouteurs",
+                "Can le téléphone",
+                "JoOoAnnY",
+                "Le théorème de demorgan"]
+        responses = random.choice(responses)
+        embed=discord.Embed(title="Wiliam Hilaire à parlé!", color=discord.Color.purple())
+        embed.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+        embed.add_field(name='Hilaire à dit: ', value=f'{responses}')
+        embed.set_footer(text=Help.version1)
+        with open("./Autres/hilaire.png", "rb") as f:
+            image_data = f.read()
+        embed.set_thumbnail(url="attachment://hilaire.png")
+        await ctx.send(embed=embed, file=discord.File(io.BytesIO(image_data), "hilaire.png"))
 
 async def setup(client):
     await client.add_cog(utility(client))

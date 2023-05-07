@@ -17,36 +17,31 @@ activities = cycle([
     Activity(name='Samsung Watch 5 Pro', type=discord.ActivityType.playing),
 ])
 
+@client.event
+async def on_ready():
+    await asyncio.sleep(1)
+    print("main.py is ready")
+    print("")
+    print("Everything loaded up Bot Ready!")
+    change_activity.start()
 
-
-
+async def load():
+    for filename in os.listdir("./cogs"):
+        if filename.endswith(".py"):
+            await client.load_extension(f"cogs.{filename[:-3]}")
     
 @tasks.loop(seconds=7)
 async def change_activity():
     activity = next(activities)
     await client.change_presence(activity=activity)
 
-
-async def load():
-    for filename in os.listdir("./cogs"):
-        if filename.endswith(".py"):
-            await client.load_extension(f"cogs.{filename[:-3]}")
-
-
 # ping in / command
-
 @client.tree.command(name="ping", description="show ping in ms test")
 async def ping(interaction: discord.Interaction):
         bot_latency = round(client.latency * 1000)
         await interaction.response.send_message(f"Pong! {bot_latency} ms.")
         
-@client.event
-async def on_ready():
-    await asyncio.sleep(1)
-    print("")
-    print("Bot Ready!")
-    change_activity.start()
-
+# show if commands exist
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
@@ -55,9 +50,7 @@ async def on_command_error(ctx, error):
         embed.set_footer(text=Help.version1)
         await ctx.send(embed=embed, delete_after=10)
 
-  
-
-
+# stop the bot
 @client.command()
 @commands.is_owner()
 async def stop(ctx):
@@ -74,7 +67,6 @@ async def stop(ctx):
     print("Arrêté par l'utilisateur")
     print("")
     await client.close()
-
 
 # Run the bot
 try:

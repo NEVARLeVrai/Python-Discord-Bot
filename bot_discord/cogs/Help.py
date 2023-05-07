@@ -13,13 +13,10 @@ class Help(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-
     
     @commands.Cog.listener()
     async def on_ready(self):
         print("Help.py is ready")
-        
-    
         
     @commands.command()
     async def helps(self, ctx):
@@ -66,9 +63,7 @@ class Help(commands.Cog):
         embed_message.add_field(name="report", value="report only for report a bug or make a feedback =report [something to send]")
         embed_message.set_footer(text=version1)
 
-        await ctx.send(embed=embed_message)
-
-          
+        await ctx.send(embed=embed_message) 
     
     @commands.command(aliases=["v"])
     async def version(self, ctx):
@@ -85,10 +80,10 @@ class Help(commands.Cog):
         embed.add_field(name="Preview Version", value="Bot V.0103-23.alpha")
         embed.add_field(name="Update Logs", value="`Optimisation, First update and alot of new command`")
         embed.add_field(name="Date format", value="`MM/DD/YY`")
-        with open("./Autres/hilaire.png", "rb") as f:
+        with open("./Autres/version.jpg", "rb") as f:
             image_data = f.read()
-        embed.set_thumbnail(url="attachment://hilaire.png")
-        await ctx.send(embed=embed, file=discord.File(io.BytesIO(image_data), "hilaire.png"))
+        embed.set_thumbnail(url="attachment://version.jpg")
+        await ctx.send(embed=embed, file=discord.File(io.BytesIO(image_data), "version.jpg"))
         
     @commands.command()
     async def ping(self, ctx):
@@ -100,7 +95,6 @@ class Help(commands.Cog):
         embed.set_footer(text=version1)
         await ctx.send(embed=embed)
 
-
-            
+      
 async def setup(client):
     await client.add_cog(Help(client))

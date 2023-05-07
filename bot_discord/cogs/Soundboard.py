@@ -17,9 +17,7 @@ class Soundboard(commands.Cog):
         self.voice_client = None
         self.sound_files = os.listdir("./Sounds")
         self.sound_files = [f for f in self.sound_files if f.endswith(".mp3")]
-        self.random_task = None
-
-        
+        self.random_task = None    
     
     @commands.Cog.listener()
     async def on_ready(self):
@@ -251,9 +249,6 @@ class Soundboard(commands.Cog):
             embed6.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
             embed6.set_footer(text=Help.version1)
             await ctx.channel.send(embed = embed6, delete_after=5)
-            
-            
-
 
     @commands.command()
     async def sstop(self, ctx):
@@ -288,7 +283,6 @@ class Soundboard(commands.Cog):
         embed12.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
         embed12.set_footer(text=Help.version1)
         await ctx.send(embed = embed12, delete_after=5)
-  
     
     @commands.command()
     @commands.has_permissions(administrator=True)
@@ -316,9 +310,7 @@ class Soundboard(commands.Cog):
             embed47 = discord.Embed(title= "Vocal Kick", description="Tous les utilisateurs ont été expulsés du salon vocal", color=discord.Color.green())
             embed47.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
             embed47.set_footer(text=Help.version1)
-            await ctx.send(embed = embed47, delete_after=5)
-
-               
+            await ctx.send(embed = embed47, delete_after=5)            
 
 async def setup(client):
     await client.add_cog(Soundboard(client))
