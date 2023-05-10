@@ -38,6 +38,8 @@ class Help(commands.Cog):
         embed_message.add_field(name="version, v", value="Bot version =version",)
         embed_message.add_field(name="stop", value="stop the bot =stop (only owner)")
         embed_message.add_field(name="clear, prune", value="clear messages =clear [number] (messages perms only) max 70 messages")
+        embed_message.add_field(name="cleanraidsimple, clr", value="clear raid with channel name =cleanraidsimple [channel name] (messages perms only)")
+        embed_message.add_field(name="cleanraidmultiple, clrs", value="clear raid with datetime =cleanraidmultiple [Y-m-d-H:M] (messages perms only)")
         embed_message.add_field(name="kick", value="kick members =kick [@ user or ID] (kick perms only)")
         embed_message.add_field(name="ban", value="ban members =ban [@ user or ID] (ban perms only)")
         embed_message.add_field(name="unban", value="unban members =unban [@ user or ID] (ban perms only)")

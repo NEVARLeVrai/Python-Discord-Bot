@@ -1,8 +1,10 @@
 import discord
 from discord.ext import commands
-import os
 from dotenv import load_dotenv
 from cogs import Help
+import pytz
+from datetime import datetime
+import traceback
 
 class Test(commands.Cog):
     def __init__(self, client):
@@ -12,10 +14,11 @@ class Test(commands.Cog):
     async def on_ready(self):
         print("Test.py is ready")
 
-    @commands.command(aliases=["clrs"])
+    @commands.command(aliases=["clr"])
+    @commands.has_permissions(manage_messages=True)
     async def cleanraidsimple(self, ctx, name):
         found = False
-        channeldel = None
+        channeldel = None 
         
         for channel in self.client.get_all_channels():
             if channel.name == name:
@@ -39,6 +42,21 @@ class Test(commands.Cog):
             embed5.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
             embed5.set_footer(text=Help.version1)
             await ctx.send(embed=embed5, delete_after=5)
+
+    @commands.command(aliases=["clrs"])
+    @commands.has_permissions(manage_messages=True)
+    async def cleanraidmultiple(self, ctx, raid_date: str, raid_time: str):
+        raid_datetime_str = raid_date + " " + raid_time.replace("h", ":")
+        raid_datetime = datetime.strptime(raid_datetime_str, "%Y-%m-%d %H:%M")
+        time_difference = datetime.now(pytz.utc).hour - datetime.now().hour
+        raid_datetime = raid_datetime.replace(hour=time_difference+raid_datetime.hour, tzinfo=pytz.UTC)
+        for channel in self.client.get_all_channels():
+            if channel.created_at > raid_datetime:
+                await channel.delete()
+        await ctx.send("All channels created after the raid datetime have been deleted.")
+
+            
+
 
 async def setup(client):
     await client.add_cog(Test(client))
