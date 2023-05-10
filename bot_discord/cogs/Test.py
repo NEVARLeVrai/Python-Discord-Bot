@@ -2,9 +2,9 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 from cogs import Help
-import pytz
 from datetime import datetime
 import traceback
+import pytz
 
 class Test(commands.Cog):
     def __init__(self, client):
