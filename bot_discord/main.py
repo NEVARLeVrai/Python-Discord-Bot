@@ -1,5 +1,5 @@
-import discord
-from discord import Activity, ActivityType
+import discord 
+from discord import Activity, ActivityType, app_commands
 from discord.ext import commands, tasks
 from itertools import cycle
 import os
@@ -8,7 +8,7 @@ from cogs import Help
 import io
 import traceback
 
-client = commands.Bot(command_prefix="=", intents=discord.Intents.all())
+client = commands.Bot(command_prefix="=", intents= discord.Intents.all())
 activities = cycle([
     Activity(name='Crococlip', type=discord.ActivityType.playing),
     Activity(name='Geogebra Mode Examen', type=discord.ActivityType.playing),
@@ -22,24 +22,31 @@ async def on_ready():
     await asyncio.sleep(1)
     print("main.py is ready")
     print("")
-    print("Everything loaded up Bot Ready!")
     change_activity.start()
+    try:
+        synced = await client.tree.sync()
+        print(f"Synced {len(synced)} slash commands")
+        print("Everything loaded up Bot Ready!")
+    except Exception as e:
+        print(e)
+        
+@client.tree.command(name="ping", description="show ping in ms")
+async def ping(interaction: discord.Interaction):
+    bot_latency = round(client.latency * 1000)
+    await interaction.response.send_message(f"Pong! {bot_latency} ms.")
+
 
 async def load():
     for filename in os.listdir("./cogs"):
         if filename.endswith(".py"):
             await client.load_extension(f"cogs.{filename[:-3]}")
-    
+
+
 @tasks.loop(seconds=7)
 async def change_activity():
     activity = next(activities)
     await client.change_presence(activity=activity)
 
-# ping in / command
-@client.tree.command(name="ping", description="show ping in ms test")
-async def ping(interaction: discord.Interaction):
-        bot_latency = round(client.latency * 1000)
-        await interaction.response.send_message(f"Pong! {bot_latency} ms.")
         
 # show if commands exist
 @client.event
@@ -72,7 +79,7 @@ async def stop(ctx):
 try:
     asyncio.run(load())
     print("")
-    with open("G:/Autres ordinateurs/PC DanTwo/VSC/Bot_Discord_Folder/token.txt", "r") as f:
+    with open("C:/Users/danie/Mon Drive/token.txt", "r") as f:
         token = f.read().strip()
     client.run(token)
 

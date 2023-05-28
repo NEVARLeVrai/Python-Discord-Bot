@@ -36,7 +36,6 @@ class Test(commands.Cog):
             embed3.set_footer(text=Help.version1)
             await ctx.send(embed=embed3, delete_after=5)
             
-    
         else:
             embed5 = discord.Embed(title="Nettoyage Raid par nom", description=f"Aucun Salon(s) avec le nom **{name}** trouvé.", color=discord.Color.red())
             embed5.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
@@ -53,9 +52,30 @@ class Test(commands.Cog):
         for channel in self.client.get_all_channels():
             if channel.created_at > raid_datetime:
                 await channel.delete()
-        await ctx.send("All channels created after the raid datetime have been deleted.")
+        embed6 = discord.Embed(title="Nettoyage Raid par temps", description=f"Salon(s) entre **{raid_datetime}** ont été supprimés", color=discord.Color.green())
+        embed6.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+        embed6.set_footer(text=Help.version1)
+        await ctx.send(embed=embed6, delete_after=5)
 
-            
+    @cleanraidsimple.error
+    async def cleanraidsimple_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send("You do not have permission to manage messages.")
+        elif isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Please enter the name of the channel to delete.")
+        else:
+            await ctx.send("An error occurred while processing the command.")
+
+    
+    @cleanraidmultiple.error
+    async def cleanraidmultiple_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send("You do not have permission to manage messages.")
+        elif isinstance(error, commands.BadArgument):
+            await ctx.send("Please enter a valid raid date and time in the format 'YYYY-MM-DD HH:MM'.")
+        else:
+            await ctx.send("An error occurred while processing the command.")
+
 
 
 async def setup(client):

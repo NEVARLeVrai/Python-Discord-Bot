@@ -54,7 +54,7 @@ class utility(commands.Cog):
         embed1.add_field(name="Langue:", value=f"**{lang}**")
         embed1.add_field(name="Dit:", value=f"**{text}**", inline=False)
         embed1.set_footer(text=Help.version1)
-        await ctx.send(embed=embed1, delete_after=15)
+        await ctx.send(embed=embed1, delete_after=25)
         await self.send_tts(vc, lang, vol , text)
         
         

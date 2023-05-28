@@ -3,11 +3,11 @@ from discord.ext import commands
 import io
 import traceback
 
-version1="Bot V.0305-23.beta"
-version2 ="`test`"
+version1="Bot V.2805-23.beta"
+version2 ="`fix slash commands and performance udpate`"
 
-version3="Bot V.2404-23.beta"
-version4 ="`Optimisation, vkick command, update helps command`"
+version3="Bot V.1005-23.beta"
+version4 ="`raid clear command test`"
 
 class Help(commands.Cog):
 
@@ -97,6 +97,7 @@ class Help(commands.Cog):
         embed.set_footer(text=version1)
         await ctx.send(embed=embed)
 
+    
       
 async def setup(client):
     await client.add_cog(Help(client))
