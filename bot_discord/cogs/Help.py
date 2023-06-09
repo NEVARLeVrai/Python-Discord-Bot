@@ -6,7 +6,7 @@ import requests
 from cogs import Help
 
 version1="Bot V.0906-23.beta"
-version2 ="`optimization upgrade`"
+version2 ="`optimization upgrade, chat gpt and mention bot help`"
 
 version3="Bot V.2805-23.beta"
 version4 ="`fix slash commands and performance udpate`"
@@ -149,10 +149,10 @@ class Help(commands.Cog):
         embed_message5.add_field(name="deldms, delmp", value="deldms clear dms with bot =deldms (admin perms only)")
         
         await ctx.send(embed=embed_message)
-        await ctx.send(embed=embed_message2)
-        await ctx.send(embed=embed_message3)
         await ctx.send(embed=embed_message4)
         await ctx.send(embed=embed_message5)
+        await ctx.send(embed=embed_message2)
+        await ctx.send(embed=embed_message3)
     
     
     @commands.command(aliases=["v"])

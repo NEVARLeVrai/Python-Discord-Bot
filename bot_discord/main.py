@@ -8,7 +8,10 @@ from cogs import Help
 import io
 import traceback
 
+
+
 client = commands.Bot(command_prefix="=", intents= discord.Intents.all())
+
 activities = cycle([
     Activity(name='Crococlip 🐊', type=discord.ActivityType.playing),
     Activity(name='Geogebra Mode Examen 📊', type=discord.ActivityType.playing),
@@ -16,6 +19,17 @@ activities = cycle([
     Activity(name='MBN Modding 🔧', type=ActivityType.streaming, url='https://www.youtube.com/watch?v=nPeqfo4kkGw'),
     Activity(name='Samsung Watch 5 Pro ⌚', type=discord.ActivityType.playing),
 ])
+
+
+@client.event
+async def on_message(message):
+    if client.user.mentioned_in(message):  # Vérifie si le bot est mentionné dans le message
+        async with message.channel.typing():
+            await asyncio.sleep(1)  # Simulation de l'écriture du bot (1 secondes dans cet exemple)
+            await message.channel.send(f"Oh salut {message.author.mention}, fais ``=helps`` pour connaitre les différentes commandes.")
+    else:
+        await client.process_commands(message)
+
 
 @client.event
 async def on_ready():
@@ -46,8 +60,7 @@ async def load():
 async def change_activity():
     activity = next(activities)
     await client.change_presence(activity=activity)
-
-        
+   
 # show if commands exist
 @client.event
 async def on_command_error(ctx, error):
@@ -55,7 +68,7 @@ async def on_command_error(ctx, error):
         embed = discord.Embed(title= "Commande inconnue", description="Utilisez **=helps** pour la liste des commandes", color=discord.Color.red())
         embed.set_image(url=ctx.guild.icon)
         embed.set_footer(text=Help.version1)
-        await ctx.send(embed=embed, delete_after=10)
+        await ctx.send(embed=embed, delete_after=10)       
 
 # stop the bot
 @client.command()
