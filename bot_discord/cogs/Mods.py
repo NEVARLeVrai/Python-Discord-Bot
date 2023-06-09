@@ -3,41 +3,21 @@ from discord.ext import commands
 import asyncio
 from cogs import Help
 import traceback
-import requests
+from dotenv import load_dotenv
+from datetime import datetime
+import pytz
 
 
-class Modo(commands.Cog):
+class Mods(commands.Cog):
     def __init__(self, client):
         self.client = client    
-        self.webhook_url = "https://discord.com/api/webhooks/1097171152079704205/J0-Ib9GBFpGhRedu1Qpblot6rAxoHeZGF-tvgCGyazdp_XIeaTyqsAO2lYsL7yEdg3Dv" # Remplacez WEBHOOK
+
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Modo.py is ready")
+        print("Mods.py is ready")
 
-    @commands.command(name="report")
-    async def report(self, ctx, *, message: str):
-        await ctx.message.delete()
-        """Signaler un bug"""
-        data = {
-            "content": f"**Bug signalé !**\n\nPar: **{ctx.author.name}#{ctx.author.discriminator}**\nID: **{ctx.author.id}**\nMention: {ctx.author.mention}\nContenu: {message}\n\nDev: **<@745923070736465940>**\n**{Help.version1}**"
-        }
-        headers = {
-            "Content-Type": "application/json"
-        }
-        response = requests.post(self.webhook_url, json=data, headers=headers)
-        if response.status_code == 204:
-            embedc = discord.Embed(title="Signalement", description="Merci d'avoir signalé ce bug.", color=discord.Color.green())
-            embedc.add_field(name="",value="Nous allons le corriger dès que possible.", inline=False)
-            embedc.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
-            embedc.set_footer(text=Help.version1)
-            await ctx.send(embed=embedc, delete_after=5)
-        else:
-            embedc1 = discord.Embed(title="Erreur de signalement.", description="Erreur lors de l'envoi du message.", color=discord.Color.red())
-            embedc1.add_field(name="",value="Veuillez réessayer plus tard.", inline=False)
-            embedc1.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
-            embedc1.set_footer(text=Help.version1)
-            await ctx.send(embed=embedc1, delete_after=5)       
+ 
         
     @commands.command(aliases=["prune"])
     @commands.has_permissions(manage_messages=True)
@@ -118,6 +98,70 @@ class Modo(commands.Cog):
             await ctx.send(message)
             sent_messages += 1
             await asyncio.sleep(0.5) # Attendre une seconde entre chaque envoi de message
+            
+    @commands.command(aliases=["clr"])
+    @commands.has_permissions(manage_messages=True)
+    async def cleanraidsimple(self, ctx, name):
+        found = False
+        channeldel = None 
+        
+        for channel in self.client.get_all_channels():
+            if channel.name == name:
+                found = True
+                channeldel = channel
+                        
+        if found:
+            embed4 = discord.Embed(title="Nettoyage Raid par nom", description=f"Suppression des ou d'un Salon(s) **{channel}**", color=discord.Color.yellow())
+            embed4.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+            embed4.set_footer(text=Help.version1)
+            await ctx.send(embed=embed4, delete_after=5)           
+            await channeldel.delete()
+            embed3 = discord.Embed(title="Nettoyage Raid par nom", description=f"Salon(s) **{channel}** supprimé avec succès!", color=discord.Color.green())
+            embed3.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+            embed3.set_footer(text=Help.version1)
+            await ctx.send(embed=embed3, delete_after=5)
+            
+        else:
+            embed5 = discord.Embed(title="Nettoyage Raid par nom", description=f"Aucun Salon(s) avec le nom **{name}** trouvé.", color=discord.Color.red())
+            embed5.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+            embed5.set_footer(text=Help.version1)
+            await ctx.send(embed=embed5, delete_after=5)
+
+    @commands.command(aliases=["clrs"])
+    @commands.has_permissions(manage_messages=True)
+    async def cleanraidmultiple(self, ctx, raid_date: str, raid_time: str):
+        raid_datetime_str = raid_date + " " + raid_time.replace("h", ":")
+        raid_datetime = datetime.strptime(raid_datetime_str, "%Y-%m-%d %H:%M")
+        time_difference = datetime.now(pytz.utc).hour - datetime.now().hour
+        raid_datetime = raid_datetime.replace(hour=time_difference+raid_datetime.hour, tzinfo=pytz.UTC)
+        for channel in self.client.get_all_channels():
+            if channel.created_at > raid_datetime:
+                await channel.delete()
+        embed6 = discord.Embed(title="Nettoyage Raid par temps", description=f"Salon(s) entre **{raid_datetime}** ont été supprimés", color=discord.Color.green())
+        embed6.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+        embed6.set_footer(text=Help.version1)
+        await ctx.send(embed=embed6, delete_after=5)
+
+    @cleanraidsimple.error
+    async def cleanraidsimple_error(self, ctx, error):
+        await ctx.message.delete()
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send("You do not have permission to manage messages.")
+        elif isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Please enter the name of the channel to delete.")
+        else:
+            await ctx.send("An error occurred while processing the command.")
+
+    
+    @cleanraidmultiple.error
+    async def cleanraidmultiple_error(self, ctx, error):
+        await ctx.message.delete()
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send("You do not have permission to manage messages.")
+        elif isinstance(error, commands.BadArgument):
+            await ctx.send("Please enter a valid raid date and time in the format 'YYYY-MM-DD HH:MM'.")
+        else:
+            await ctx.send("An error occurred while processing the command.")
                   
 async def setup(client):
-    await client.add_cog(Modo(client))
+    await client.add_cog(Mods(client))

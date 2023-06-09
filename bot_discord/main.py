@@ -10,11 +10,11 @@ import traceback
 
 client = commands.Bot(command_prefix="=", intents= discord.Intents.all())
 activities = cycle([
-    Activity(name='Crococlip', type=discord.ActivityType.playing),
-    Activity(name='Geogebra Mode Examen', type=discord.ActivityType.playing),
-    Activity(name='Coding', type=ActivityType.listening),
-    Activity(name='MBN Modding', type=ActivityType.streaming, url='https://www.youtube.com/watch?v=nPeqfo4kkGw'),
-    Activity(name='Samsung Watch 5 Pro', type=discord.ActivityType.playing),
+    Activity(name='Crococlip 🐊', type=discord.ActivityType.playing),
+    Activity(name='Geogebra Mode Examen 📊', type=discord.ActivityType.playing),
+    Activity(name='Coding 👨‍💻', type=ActivityType.listening),
+    Activity(name='MBN Modding 🔧', type=ActivityType.streaming, url='https://www.youtube.com/watch?v=nPeqfo4kkGw'),
+    Activity(name='Samsung Watch 5 Pro ⌚', type=discord.ActivityType.playing),
 ])
 
 @client.event
