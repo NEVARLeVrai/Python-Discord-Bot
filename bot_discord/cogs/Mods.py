@@ -6,6 +6,7 @@ import traceback
 from dotenv import load_dotenv
 from datetime import datetime
 import pytz
+import requests
 
 
 class Mods(commands.Cog):
@@ -13,11 +14,12 @@ class Mods(commands.Cog):
         self.client = client    
 
 
+
     @commands.Cog.listener()
     async def on_ready(self):
         print("Mods.py is ready")
 
- 
+
         
     @commands.command(aliases=["prune"])
     @commands.has_permissions(manage_messages=True)

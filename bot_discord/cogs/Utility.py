@@ -205,7 +205,7 @@ class utility(commands.Cog):
         response = openai.Completion.create(
             model="text-davinci-003",
             prompt=question,
-            max_tokens=200,
+            max_tokens=500,
             n=1,
             stop=None,
             temperature=0.9

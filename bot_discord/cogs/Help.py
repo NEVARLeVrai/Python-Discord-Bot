@@ -1,9 +1,9 @@
 import discord
 from discord.ext import commands
 import io
-import traceback
 import requests
 from cogs import Help
+import traceback
 
 version1="Bot V.0906-23.beta"
 version2 ="`optimization upgrade, chat gpt and mention bot help`"
@@ -11,18 +11,21 @@ version2 ="`optimization upgrade, chat gpt and mention bot help`"
 version3="Bot V.2805-23.beta"
 version4 ="`fix slash commands and performance udpate`"
 
-class Help(commands.Cog):
-
+class Help(commands.Cog):   
     def __init__(self, client):
         self.client = client
-        self.webhook_url = "https://discord.com/api/webhooks/1097171152079704205/J0-Ib9GBFpGhRedu1Qpblot6rAxoHeZGF-tvgCGyazdp_XIeaTyqsAO2lYsL7yEdg3Dv" # Remplacez WEBHOOK
-  
+        self.webhook_url = "https://discord.com/api/webhooks/1116792233623027786/D7ncO9oKijwNUqYd59HOEyYIYcWAnPJH5MJwXlRbtsyTU_WwORJcUi9WzYXE7B2_sdQs" # Remplacez WEBHOOK
+     
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print("Help.py is ready")
+        
     @commands.command(name="report")
     async def report(self, ctx, *, message: str):
         await ctx.message.delete()
         """Signaler un bug"""
         data = {
-            "content": f"**Bug signalé !**\n\nPar: **{ctx.author.name}#{ctx.author.discriminator}**\nID: **{ctx.author.id}**\nMention: {ctx.author.mention}\nContenu: {message}\n\n**{Help.version1}**"
+            "content": f"**Bug signalé !**\n\nPar: **{ctx.author.name}#{ctx.author.discriminator}**\nID: **{ctx.author.id}**\nMention: {ctx.author.mention}\nContenu: {message}\n\n**{version1}**"
         }
         headers = {
             "Content-Type": "application/json"
@@ -32,19 +35,15 @@ class Help(commands.Cog):
             embedc = discord.Embed(title="Signalement", description="Merci d'avoir signalé ce bug.", color=discord.Color.green())
             embedc.add_field(name="",value="Nous allons le corriger dès que possible.", inline=False)
             embedc.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
-            embedc.set_footer(text=Help.version1)
+            embedc.set_footer(text=version1)
             await ctx.send(embed=embedc, delete_after=5)
         else:
             embedc1 = discord.Embed(title="Erreur de signalement.", description="Erreur lors de l'envoi du message.", color=discord.Color.red())
             embedc1.add_field(name="",value="Veuillez réessayer plus tard.", inline=False)
             embedc1.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
-            embedc1.set_footer(text=Help.version1)
-            await ctx.send(embed=embedc1, delete_after=5) 
-  
-    
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print("Help.py is ready")
+            embedc1.set_footer(text=version1)
+            await ctx.send(embed=embedc1, delete_after=5)              
+        
         
     @commands.command()
     async def helps(self, ctx):
