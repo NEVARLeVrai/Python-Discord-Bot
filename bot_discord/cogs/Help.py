@@ -141,6 +141,7 @@ class Help(commands.Cog):
         )
         
         embed_message5.set_thumbnail(url=ctx.guild.icon)
+        embed_message5.add_field(name="gpt", value="use gpt in discord =gpt [Something to ask]")
         embed_message5.add_field(name="spam", value="spam in chat =spam [Number of Times] [Something to say] (admin perms only)")
         embed_message5.add_field(name="repeat, say", value="Repeat messages =repeat [Something to repeat]")
         embed_message5.add_field(name="8ball, magicball", value="8ball game =8ball [Something to answer]")
