@@ -5,11 +5,11 @@ import requests
 from cogs import Help
 import traceback
 
-version1="Bot V.0906-23.beta"
-version2 ="`optimization upgrade, chat gpt and mention bot help`"
+version1="Bot V.1006-23.beta"
+version2 ="`optimization upgrade, chat gpt improvements, chat gpt in mp work, dalle avalaible work in mp too, mention bot in mp work, report work in mp, version work in mp and ping work in mp`"
 
-version3="Bot V.2805-23.beta"
-version4 ="`fix slash commands and performance udpate`"
+version3="Bot V.0906-23.beta"
+version4 ="`optimization upgrade, chat gpt and mention bot help in text channels`"
 
 class Help(commands.Cog):   
     def __init__(self, client):
@@ -22,8 +22,10 @@ class Help(commands.Cog):
         
     @commands.command(name="report")
     async def report(self, ctx, *, message: str):
-        await ctx.message.delete()
         """Signaler un bug"""
+        if isinstance(ctx.channel, discord.TextChannel):
+            await ctx.message.delete()
+            
         data = {
             "content": f"**Bug signalé !**\n\nPar: **{ctx.author.name}#{ctx.author.discriminator}**\nID: **{ctx.author.id}**\nMention: {ctx.author.mention}\nContenu: {message}\n\n**{version1}**"
         }
@@ -42,7 +44,8 @@ class Help(commands.Cog):
             embedc1.add_field(name="",value="Veuillez réessayer plus tard.", inline=False)
             embedc1.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
             embedc1.set_footer(text=version1)
-            await ctx.send(embed=embedc1, delete_after=5)              
+            await ctx.send(embed=embedc1, delete_after=5)
+                     
         
         
     @commands.command()
@@ -157,7 +160,8 @@ class Help(commands.Cog):
     
     @commands.command(aliases=["v"])
     async def version(self, ctx):
-        await ctx.message.delete()
+        if isinstance(ctx.channel, discord.TextChannel):
+            await ctx.message.delete()
         embed = discord.Embed(title="Versions du Bot", color=discord.Color.random())
         embed.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
         embed.add_field(name="", value="")
@@ -177,7 +181,9 @@ class Help(commands.Cog):
         
     @commands.command()
     async def ping(self, ctx):
-        await ctx.message.delete()
+        if isinstance(ctx.channel, discord.TextChannel):
+            await ctx.message.delete()
+            
         bot_latency = round(self.client.latency * 1000)
         
         embed = discord.Embed(title=f"Pong! {bot_latency} ms.", color=discord.Color.random())

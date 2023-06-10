@@ -62,13 +62,16 @@ async def change_activity():
     await client.change_presence(activity=activity)
    
 # show if commands exist
-@client.event
+@client.event    
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         embed = discord.Embed(title= "Commande inconnue", description="Utilisez **=helps** pour la liste des commandes", color=discord.Color.red())
         embed.set_image(url=ctx.guild.icon)
         embed.set_footer(text=Help.version1)
-        await ctx.send(embed=embed, delete_after=10)       
+        await ctx.send(embed=embed, delete_after=10) 
+        
+    if isinstance(ctx.channel, discord.TextChannel):
+        await ctx.message.delete()      
 
 # stop the bot
 @client.command()

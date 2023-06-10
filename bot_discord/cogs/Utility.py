@@ -6,10 +6,12 @@ import asyncio
 from cogs import Help
 import traceback
 import openai
+import datetime
 
 class utility(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.reponse_en_cours = False  # Variable de verrouillage initialement à False
         with open("C:/Users/danie/Mon Drive/tokengpt.txt", "r") as f:
             GPT_API_KEY = f.read().strip()
         openai.api_key = GPT_API_KEY
@@ -194,29 +196,99 @@ class utility(commands.Cog):
         embed.set_thumbnail(url="attachment://hilaire.png")
         await ctx.send(embed=embed, file=discord.File(io.BytesIO(image_data), "hilaire.png"))
         
+
     @commands.command()
     async def gpt(self, ctx, *, question):
-        async with ctx.typing():
-            response = self.generer_reponse(question)
-            response = self.nettoyer_texte(response)
-        await ctx.send(response)
+        if self.reponse_en_cours:
+            await ctx.send("\nUne réponse est déjà en cours de génération. Veuillez patienter.", delete_after=5)
+            if isinstance(ctx.channel, discord.TextChannel):
+                await ctx.message.delete()
+            return
 
-    def generer_reponse(self, question):
+        self.reponse_en_cours = True  # Définir le verrouillage sur True
+
+        try:
+            async with ctx.typing():
+                response = self.gpt_reponse(question)
+                response = self.nettoyer_texte(response)
+                response_with_mention = f"{ctx.author.mention} {response}"  # Ajouter la mention à la réponse
+            await ctx.send(response_with_mention)
+
+            with open("C:/Users/danie/Mon Drive/gptlogs.txt", "a") as f:
+                current_time = datetime.datetime.now()
+                f.write(f"Date: {current_time.strftime('%Y-%m-%d')}\n")
+                f.write(f"Heure: {current_time.strftime('%H:%M:%S')}\n")
+                f.write(f"User: {ctx.author.mention}\n")                
+                f.write(f"Question: {question}\n")
+                f.write(f"Réponse: {response}\n")
+                f.write("-" * 50 + "\n")
+
+        finally:
+            self.reponse_en_cours = False  # Réinitialiser le verrouillage à False
+
+    def gpt_reponse(self, question):
         response = openai.Completion.create(
             model="text-davinci-003",
             prompt=question,
             max_tokens=500,
             n=1,
             stop=None,
-            temperature=0.9
+            temperature=0.7
         )
         bot_response = response.choices[0].text.strip()
+        print("\n\nChat GPT:")
+        print(f"Question: {question}")
+        print(f"Réponse: {bot_response}")
         return bot_response
+        
 
     def nettoyer_texte(self, texte):
         # Supprimer les sauts de ligne redondants
         texte_nettoye = "\n".join(line for line in texte.splitlines() if line.strip())
         return texte_nettoye
+
+
+
+    @commands.command()
+    async def dalle(self, ctx, *, question):
+        if self.reponse_en_cours:
+            await ctx.send("\nUne réponse est déjà en cours de génération. Veuillez patienter.", delete_after=5)
+            if isinstance(ctx.channel, discord.TextChannel):
+                await ctx.message.delete()
+            return
+
+        self.reponse_en_cours = True  # Définir le verrouillage sur True
+
+        try:
+            async with ctx.typing():
+                response = self.dalle_reponse(question)
+                response_with_mention = f"{ctx.author.mention} {response}"  # Ajouter la mention à la réponse
+            await ctx.send(response_with_mention)
+
+            with open("C:/Users/danie/Mon Drive/dallelogs.txt", "a") as f:
+                current_time = datetime.datetime.now()
+                f.write(f"Date: {current_time.strftime('%Y-%m-%d')}\n")
+                f.write(f"Heure: {current_time.strftime('%H:%M:%S')}\n")
+                f.write(f"User: {ctx.author.mention}\n")                
+                f.write(f"Question: {question}\n")
+                f.write(f"Réponse: {response}\n")
+                f.write("-" * 50 + "\n")
+
+        finally:
+            self.reponse_en_cours = False  # Réinitialiser le verrouillage à False
+
+    def dalle_reponse(self, question):
+        response = openai.Image.create(
+        prompt=question,
+        n=1,
+        size="1024x1024"
+        )
+        bot_response = response['data'][0]['url']
+        print("\n\nDall-E:")
+        print(f"Question: {question}")
+        print(f"Réponse: {bot_response}")
+        return bot_response
+        
 
 async def setup(client):
     await client.add_cog(utility(client))
