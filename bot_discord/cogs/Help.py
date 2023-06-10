@@ -50,7 +50,8 @@ class Help(commands.Cog):
         
     @commands.command()
     async def helps(self, ctx):
-        await ctx.message.delete()
+        if isinstance(ctx.channel, discord.TextChannel):
+            await ctx.message.delete()
 
         embed_message = discord.Embed(
             title="Helps",
@@ -62,7 +63,7 @@ class Help(commands.Cog):
             name=f"Demandé par {ctx.author.name}",
             icon_url=ctx.author.avatar
         )
-        embed_message.set_thumbnail(url=ctx.guild.icon)
+
         embed_message.add_field(name="helps", value="help show this message =help")
         embed_message.add_field(name="ping", value="ping the bot =ping")
         embed_message.add_field(name="version, v", value="Bot version =version",)
@@ -81,7 +82,6 @@ class Help(commands.Cog):
             icon_url=ctx.author.avatar
         )
         
-        embed_message2.set_thumbnail(url=ctx.guild.icon)
         embed_message2.add_field(name="slist", value="slist list all soundboard =slist 4")
         embed_message2.add_field(name="splay", value="splay make play soundboard =splay [number]")
         embed_message2.add_field(name="sjoin", value="sjoin make join bot =sjoin [need to be in a vc]")
@@ -92,7 +92,6 @@ class Help(commands.Cog):
         embed_message2.add_field(name="srandomstop", value="stops stop random soundboard =srandomstop")
         embed_message2.add_field(name="vkick", value="vkick kick user in a vc =vkick [@ID] (admin perms only)")
         embed_message2.add_field(name="tts", value="tts make bot say something with googletts voice in vc =tts [langue] [texte]")
-        embed_message2.set_footer(text=version1)
         
         
         embed_message3 = discord.Embed(
@@ -106,11 +105,10 @@ class Help(commands.Cog):
             icon_url=ctx.author.avatar
         )
         
-        embed_message3.set_thumbnail(url=ctx.guild.icon)
+
         embed_message3.add_field(name="level, lvl", value="level see your ranking =level [@ user]")
         embed_message3.add_field(name="resetlevel, rsl", value="resetlevel reset member level =resetlevel [@ user] (messages perms only)")
         embed_message3.add_field(name="levelsettings, lvls", value="levelsettings enable or disable leveling system (admins perms only)")
-        embed_message3.set_footer(text=version1)
         
         embed_message4 = discord.Embed(
         title="Helps Mods",
@@ -123,7 +121,7 @@ class Help(commands.Cog):
             icon_url=ctx.author.avatar
         )
         
-        embed_message4.set_thumbnail(url=ctx.guild.icon)
+      
         embed_message4.add_field(name="clear, prune", value="clear messages =clear [number] (messages perms only) max 70 messages")
         embed_message4.add_field(name="cleanraidsimple, clr", value="clear raid with channel name =cleanraidsimple [channel name] (messages perms only)")
         embed_message4.add_field(name="cleanraidmultiple, clrs", value="clear raid with datetime =cleanraidmultiple [Y-m-d-H:M] (messages perms only)")
@@ -142,8 +140,9 @@ class Help(commands.Cog):
             icon_url=ctx.author.avatar
         )
         
-        embed_message5.set_thumbnail(url=ctx.guild.icon)
+      
         embed_message5.add_field(name="gpt", value="use gpt in discord =gpt [Something to ask]")
+        embed_message5.add_field(name="dalle", value="use dalle in discord =dalle [Something to ask]")
         embed_message5.add_field(name="spam", value="spam in chat =spam [Number of Times] [Something to say] (admin perms only)")
         embed_message5.add_field(name="repeat, say", value="Repeat messages =repeat [Something to repeat]")
         embed_message5.add_field(name="8ball, magicball", value="8ball game =8ball [Something to answer]")
@@ -151,11 +150,36 @@ class Help(commands.Cog):
         embed_message5.add_field(name="mp, dm", value="mp send mp to user =mp [@ user] (admins perms only)")
         embed_message5.add_field(name="deldms, delmp", value="deldms clear dms with bot =deldms (admin perms only)")
         
+        embed_message6 = discord.Embed(
+            title="Helps MP",
+            description="Commandes disponible en MP",
+            color=discord.Color.random()
+        )
+
+        embed_message6.set_author(
+            name=f"Demandé par {ctx.author.name}",
+            icon_url=ctx.author.avatar
+        )
+
+        embed_message6.add_field(name="helps", value="help show this message =help")
+        embed_message6.add_field(name="ping", value="ping the bot =ping")
+        embed_message6.add_field(name="version, v", value="Bot version =version",)
+        embed_message6.add_field(name="stop", value="stop the bot =stop (only owner)")
+        embed_message6.add_field(name="report", value="report only for report a bug or make a feedback =report [something to send]")
+        embed_message6.add_field(name="gpt", value="use gpt in discord =gpt [Something to ask]")
+        embed_message6.add_field(name="dalle", value="use dalle in discord =dalle [Something to ask]")
+       
+              
+        with open("./Autres/info.png", "rb") as f:
+            image_data = f.read()
+        embed_message6.set_thumbnail(url="attachment://info.png")
+
         await ctx.send(embed=embed_message)
         await ctx.send(embed=embed_message4)
         await ctx.send(embed=embed_message5)
         await ctx.send(embed=embed_message2)
         await ctx.send(embed=embed_message3)
+        await ctx.send(embed=embed_message6, file=discord.File(io.BytesIO(image_data), "info.png"))
     
     
     @commands.command(aliases=["v"])

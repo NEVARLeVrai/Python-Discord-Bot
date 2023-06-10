@@ -18,6 +18,9 @@ activities = cycle([
     Activity(name='Coding 👨‍💻', type=ActivityType.listening),
     Activity(name='MBN Modding 🔧', type=ActivityType.streaming, url='https://www.youtube.com/watch?v=nPeqfo4kkGw'),
     Activity(name='Samsung Watch 5 Pro ⌚', type=discord.ActivityType.playing),
+    Activity(name='Chat GPT 🧠', type=discord.ActivityType.competing),
+    Activity(name='Dall E 🎈', type=discord.ActivityType.competing),
+    Activity(name='ZXZ AI 😏', type=discord.ActivityType.watching),
 ])
 
 
