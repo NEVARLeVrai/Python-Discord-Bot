@@ -43,33 +43,42 @@ class utility(commands.Cog):
         print("Utility.py is ready")
 
     @commands.command()
-    async def tts(self, ctx, lang="fr",vol="3.0" , *, text):
+    async def tts(self, ctx, lang="fr", vol="3.0", *, text):
         await ctx.message.delete()
         vc = None
-        if ctx.author.voice:
-            vc = await ctx.author.voice.channel.connect()
-        else:
-            embed5 = discord.Embed(title="TTS Play", description="Vous devez être dans un salon vocal pour utiliser cette commande.", color=discord.Color.red())
-            embed5.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
-            embed5.set_footer(text=Help.version1)
-            await ctx.send(embed=embed5, delete_after=5)
-            return
+        try:
+            if ctx.author.voice:
+                vc = await ctx.author.voice.channel.connect()
+            else:
+                embed5 = discord.Embed(title="TTS Play", description="Vous devez être dans un salon vocal pour utiliser cette commande.", color=discord.Color.red())
+                embed5.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+                embed5.set_footer(text=Help.version1)
+                await ctx.send(embed=embed5, delete_after=5)
+                return
 
-        embed1 = discord.Embed(title="TTS Play", color=discord.Color.green())
-        embed1.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
-        embed1.add_field(name="Volume:", value=f"**{vol}**")
-        embed1.add_field(name="Langue:", value=f"**{lang}**")
-        embed1.add_field(name="Dit:", value=f"**{text}**", inline=False)
-        embed1.set_footer(text=Help.version1)
-        await ctx.send(embed=embed1, delete_after=25)
-        await self.send_tts(vc, lang, vol , text)
-        
-        
-        await vc.disconnect()
-        embed3 = discord.Embed(title="TTS Play", description=f"Déconnecté avec succés!", color=discord.Color.green())
-        embed3.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
-        embed3.set_footer(text=Help.version1)
-        await ctx.send(embed=embed3, delete_after=5)
+            embed1 = discord.Embed(title="TTS Play", color=discord.Color.green())
+            embed1.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+            embed1.add_field(name="Volume:", value=f"**{vol}**")
+            embed1.add_field(name="Langue:", value=f"**{lang}**")
+            embed1.add_field(name="Dit:", value=f"**{text}**", inline=False)
+            embed1.set_footer(text=Help.version1)
+            await ctx.send(embed=embed1, delete_after=25)
+            await self.send_tts(vc, lang, vol, text)
+
+        except Exception as e:
+            traceback_str = ''.join(traceback.format_exception(type(e), e, e.__traceback__))
+            embed_error = discord.Embed(title="TTS Play - Erreur", description=f"Une erreur s'est produite lors de la lecture TTS:\n\n```\n{traceback_str}\n```", color=discord.Color.red())
+            embed_error.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+            embed_error.set_footer(text=Help.version1)
+            await ctx.send(embed=embed_error, delete_after=10)
+        finally:
+            if vc:
+                await vc.disconnect()
+                embed3 = discord.Embed(title="TTS Play", description="Déconnecté avec succès!", color=discord.Color.green())
+                embed3.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+                embed3.set_footer(text=Help.version1)
+                await ctx.send(embed=embed3, delete_after=5)
+
 
     @commands.command(aliases=["repeat"])
     async def say(self, ctx, *, message,):
@@ -211,7 +220,7 @@ class utility(commands.Cog):
             async with ctx.typing():
                 response = self.gpt_reponse(question)
                 response = self.nettoyer_texte(response)
-                response_with_mention = f"{ctx.author.mention} {response}"  # Ajouter la mention à la réponse
+                response_with_mention = f"{ctx.author.mention}\n{response}"  # Ajouter la mention à la réponse
             await ctx.send(response_with_mention)
 
             with open("C:/Users/danie/Mon Drive/gptlogs.txt", "a") as f:
@@ -230,7 +239,7 @@ class utility(commands.Cog):
         response = openai.Completion.create(
             model="text-davinci-003",
             prompt=question,
-            max_tokens=500,
+            max_tokens=1000,
             n=1,
             stop=None,
             temperature=0.7
@@ -262,7 +271,7 @@ class utility(commands.Cog):
         try:
             async with ctx.typing():
                 response = self.dalle_reponse(question)
-                response_with_mention = f"{ctx.author.mention} {response}"  # Ajouter la mention à la réponse
+                response_with_mention = f"{ctx.author.mention}\n{response}"  # Ajouter la mention à la réponse
             await ctx.send(response_with_mention)
 
             with open("C:/Users/danie/Mon Drive/dallelogs.txt", "a") as f:
