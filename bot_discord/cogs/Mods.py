@@ -89,7 +89,7 @@ class Mods(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def spam(self, ctx, amount:int, *, message):
         await ctx.message.delete()
-        max_amount = 15
+        max_amount = 200
         if amount > max_amount:
             await ctx.send(f"Le nombre maximum de messages que vous pouvez envoyer est de **{max_amount}**.")
             amount = max_amount

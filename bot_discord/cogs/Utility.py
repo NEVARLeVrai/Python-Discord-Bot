@@ -7,6 +7,7 @@ from cogs import Help
 import traceback
 import openai
 import datetime
+import typing
 
 class utility(commands.Cog):
     def __init__(self, client):
@@ -98,6 +99,37 @@ class utility(commands.Cog):
     
         await ctx.send(embed=embed, delete_after=10)
         
+
+    @commands.command(aliases=["repeat1"])
+    async def say1(self, ctx, destination: typing.Union[discord.TextChannel, discord.Member, str], *, message):
+        await ctx.message.delete()
+
+        if isinstance(destination, str):
+            if destination.startswith("<#") and destination.endswith(">"):
+                channel_id = int(destination[2:-1])  # Extraction de l'ID à partir de la mention
+                destination = self.client.get_channel(channel_id)
+                if not isinstance(destination, discord.TextChannel):
+                    await ctx.send("Salon invalide spécifié.")
+                    return
+            else:
+                embed1=discord.Embed(title="Message Non Envoyé!", description="Format de mention de salon incorrect.", color=discord.Color.red())
+                embed1.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+                embed1.set_footer(text=Help.version1)
+
+                await ctx.send(embed1=embed1, delete_after=10)
+                return
+
+        
+        await destination.send(message)
+
+        embed=discord.Embed(title="Message Envoyé!", description=f"Message envoyé dans {destination.mention}" if isinstance(destination, discord.TextChannel) else f"Message envoyé à {destination.name}#{destination.discriminator}", color=discord.Color.green())
+        embed.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+        embed.set_footer(text=Help.version1)
+
+        await ctx.send(embed=embed, delete_after=10)
+
+
+
         
 
     @commands.has_permissions(administrator=True)

@@ -5,10 +5,10 @@ import requests
 from cogs import Help
 import traceback
 
-version1="Bot V.1006-23.beta"
-version2 ="`optimization upgrade, chat gpt improvements, chat gpt in mp work, dalle avalaible work in mp too, mention bot in mp work, report work in mp, version work in mp and ping work in mp`"
+version1="Bot V.3008-23.beta"
+version2 ="`optimization upgrade, added say new feature`"
 
-version3="Bot V.0906-23.beta"
+version3="Bot V.1006-23.beta"
 version4 ="`optimization upgrade, chat gpt and mention bot help in text channels`"
 
 class Help(commands.Cog):   
@@ -145,6 +145,7 @@ class Help(commands.Cog):
         embed_message5.add_field(name="dalle", value="use dalle in discord =dalle [Something to ask]")
         embed_message5.add_field(name="spam", value="spam in chat =spam [Number of Times] [Something to say] (admin perms only)")
         embed_message5.add_field(name="repeat, say", value="Repeat messages =repeat [Something to repeat]")
+        embed_message5.add_field(name="repeat1, say1", value="Repeat messages =repeat [Discord Channel] [Something to repeat]")
         embed_message5.add_field(name="8ball, magicball", value="8ball game =8ball [Something to answer]")
         embed_message5.add_field(name="hilaire", value="hilaire game =hilaire")
         embed_message5.add_field(name="mp, dm", value="mp send mp to user =mp [@ user] (admins perms only)")
