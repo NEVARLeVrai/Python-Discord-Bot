@@ -5,8 +5,8 @@ import requests
 from cogs import Help
 import traceback
 
-version1="Bot V.3008-23.beta"
-version2 ="`optimization upgrade, added say new feature, spam new feature, mp upgrade, and delpmp optomization`"
+version1="Bot V.3108-23.beta"
+version2 ="`optimization upgrade, added say new feature, spam new feature, mp upgrade, and delpmp optimization`"
 
 version3="Bot V.1006-23.beta"
 version4 ="`optimization upgrade, chat gpt and mention bot help in text channels`"
