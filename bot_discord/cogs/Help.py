@@ -11,10 +11,15 @@ version2 ="`optimization upgrade, added say new feature`"
 version3="Bot V.1006-23.beta"
 version4 ="`optimization upgrade, chat gpt and mention bot help in text channels`"
 
+
+
 class Help(commands.Cog):   
     def __init__(self, client):
+        self.target_user_id = 745923070736465940  # Replace with your Discord user ID
         self.client = client
         self.webhook_url = "https://discord.com/api/webhooks/1116792233623027786/D7ncO9oKijwNUqYd59HOEyYIYcWAnPJH5MJwXlRbtsyTU_WwORJcUi9WzYXE7B2_sdQs" # Remplacez WEBHOOK
+ 
+ 
      
     @commands.Cog.listener()
     async def on_ready(self):
@@ -144,6 +149,7 @@ class Help(commands.Cog):
         embed_message5.add_field(name="gpt", value="use gpt in discord =gpt [Something to ask]")
         embed_message5.add_field(name="dalle", value="use dalle in discord =dalle [Something to ask]")
         embed_message5.add_field(name="spam", value="spam in chat =spam [Number of Times] [Something to say] (admin perms only)")
+        embed_message5.add_field(name="spam1", value="spam in chat =spam1 [Number of Times] [Discord Channel] [Something to say] (admin perms only)")
         embed_message5.add_field(name="repeat, say", value="Repeat messages =repeat [Something to repeat]")
         embed_message5.add_field(name="repeat1, say1", value="Repeat messages =repeat [Discord Channel] [Something to repeat]")
         embed_message5.add_field(name="8ball, magicball", value="8ball game =8ball [Something to answer]")
@@ -215,6 +221,26 @@ class Help(commands.Cog):
         embed.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
         embed.set_footer(text=version1)
         await ctx.send(embed=embed)
+
+
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.author == self.client.user:
+            return  # Ignore les messages envoyés par le bot lui-même
+        
+        if isinstance(message.channel, discord.DMChannel):
+            user = message.author
+            content = message.content
+            
+            # Vérifie si le message est une commande ou une mention
+            if content.startswith("=") or message.mention_everyone or self.client.user in message.mentions:
+                return  # Ignore les messages de commande ou les mentions
+            
+            target_user = self.client.get_user(self.target_user_id)
+            
+            if target_user:
+                await target_user.send(f"Message privé de **{user}**: \n\n{content}")
 
 
 async def setup(client):

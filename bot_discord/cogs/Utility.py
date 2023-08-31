@@ -16,6 +16,7 @@ class utility(commands.Cog):
         with open("C:/Users/danie/Mon Drive/tokengpt.txt", "r") as f:
             GPT_API_KEY = f.read().strip()
         openai.api_key = GPT_API_KEY
+        self.rate_limit_delay = 1  # Délai en secondes entre chaque requête (1 seconde dans cet exemple)
 
         
     def is_bot_dm(message):
@@ -138,50 +139,40 @@ class utility(commands.Cog):
         await ctx.message.delete()
         try:
             total_deleted = 0
-            deleted_messages = {}  # dictionnaire pour stocker le nombre de messages supprimés par utilisateur
 
-            # envoyer un message global indiquant que la suppression des DMs est en cours
+            # Envoie d'un message global indiquant que la suppression des DMs est en cours
             embed = discord.Embed(title="Suppression des messages privés en cours...", color=discord.Color.yellow())
             embed.set_footer(text=Help.version1)
-            await ctx.send(embed=embed, delete_after=10)
+            status_msg = await ctx.send(embed=embed)
 
             tasks = []
             for member in ctx.guild.members:
                 if not member.bot:
                     dm_channel = await member.create_dm()
-                    messages = [msg async for msg in dm_channel.history() if self.is_bot_dm(msg)]
-                    if messages:
-                        deleted_count = await dm_channel.send('\n'.join(f"Suppression de {msg.content}..." for msg in messages))
-                    else:
-                        deleted_count = None
-                    if deleted_count is not None:
-                        await deleted_count.delete()
                     messages_to_delete = [msg async for msg in dm_channel.history() if self.is_bot_dm(msg)]
                     deleted_count = len(messages_to_delete)
-                    total_deleted += deleted_count
-                    if deleted_count > 0:
-                        deleted_messages[member.name] = deleted_count  # stocker le nombre de messages supprimés par utilisateur
-                    tasks.append(asyncio.gather(*[msg.delete() for msg in messages_to_delete]))
 
-                    # envoyer un message individuel pour chaque utilisateur dont les DMs ont été supprimés
+                    if deleted_count > 0:
+                        tasks.append(dm_channel.send(f"Suppression Terminé!", delete_after=10))
+                        tasks.append(asyncio.gather(*[msg.delete() for msg in messages_to_delete]))
+                        await asyncio.sleep(self.rate_limit_delay)  # Limite de taux
+
+                    total_deleted += deleted_count
+
+                    # Envoyer un message individuel pour chaque utilisateur dont les DMs ont été supprimés
                     if deleted_count > 0:
                         embed = discord.Embed(title=f"Messages privés de **{member.name}#{member.discriminator}** supprimés !", color=discord.Color.green())
                         embed.add_field(name="Nombre de messages supprimés", value=str(deleted_count))
                         embed.set_footer(text=Help.version1)
                         tasks.append(ctx.send(embed=embed, delete_after=10))
+                        await asyncio.sleep(self.rate_limit_delay)  # Limite de taux
 
-            # attendre que toutes les tâches soient terminées
+            # Attendre que toutes les tâches soient terminées
             await asyncio.gather(*tasks)
-
-            # envoyer un message global indiquant le nombre total de messages supprimés
-            if total_deleted > 0:
-                embed = discord.Embed(title=f"Messages privés supprimés au total.", description=f"{total_deleted}", color=discord.Color.purple())
-            else:
-                embed = discord.Embed(title="Aucun message privé à supprimer.", color=discord.Color.red())
-            embed.set_footer(text=Help.version1)
-            await ctx.send(embed=embed, delete_after=10)
+            
         except Exception as e:
             traceback.print_exc()
+
 
     @commands.command(aliases=["8ball"])
     async def magicball(self, ctx, * ,question):

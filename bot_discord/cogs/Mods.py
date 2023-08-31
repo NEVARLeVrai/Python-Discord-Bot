@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from datetime import datetime
 import pytz
 import requests
+import typing
 
 
 class Mods(commands.Cog):
@@ -100,6 +101,50 @@ class Mods(commands.Cog):
             await ctx.send(message)
             sent_messages += 1
             await asyncio.sleep(0.5) # Attendre une seconde entre chaque envoi de message
+            
+
+    @commands.command(name='spam1')
+    @commands.has_permissions(administrator=True)
+    async def spam1(self, ctx, amount: int, destination: typing.Union[discord.TextChannel, str], *, message):
+        await ctx.message.delete()
+        
+        if isinstance(destination, str):
+            if destination.startswith("<#") and destination.endswith(">"):
+                channel_id = int(destination[2:-1])  # Extraction de l'ID à partir de la mention
+                destination = self.client.get_channel(channel_id)
+                if not isinstance(destination, discord.TextChannel):
+                    await ctx.send("Salon invalide spécifié.")
+                    return
+            else:
+                embed1=discord.Embed(title="Spam Non Envoyé!", description="Format de mention de salon incorrect.", color=discord.Color.red())
+                embed1.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+                embed1.set_footer(text=Help.version1)
+
+                await ctx.send(embed=embed1, delete_after=10)
+                return
+        
+        max_amount = 200
+        if amount > max_amount:
+            await ctx.send(f"Le nombre maximum de messages que vous pouvez envoyer est de **{max_amount}**.")
+            amount = max_amount
+        
+        
+        embed=discord.Embed(title="Spam Envoyé!", description=f"Spam envoyé de {amount} message(s) dans {destination.mention}" if isinstance(destination, discord.TextChannel) else f"Message envoyé à {destination.name}#{destination.discriminator}", color=discord.Color.green())
+        embed.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+        embed.set_footer(text=Help.version1)
+
+        await ctx.send(embed=embed, delete_after=10)
+
+        sent_messages = 0
+        while sent_messages < amount:
+            if sent_messages >= max_amount:
+                break
+            await destination.send(message)
+            sent_messages += 1
+            await asyncio.sleep(0.5)  # Attendre une seconde entre chaque envoi de message
+            
+
+
             
     @commands.command(aliases=["clr"])
     @commands.has_permissions(manage_messages=True)
