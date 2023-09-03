@@ -81,28 +81,32 @@ class utility(commands.Cog):
                 embed3.set_footer(text=Help.version1)
                 await ctx.send(embed=embed3, delete_after=5)
 
-
-    @commands.command(aliases=["repeat"])
-    async def say(self, ctx, *, message,):
-        await ctx.message.delete()
-        await ctx.send(message)
-    
     @commands.command(aliases=["dm"])
     @commands.has_permissions(administrator=True)
-    async def mp(self, ctx, user: discord.User, *, message: str):
-        
+    async def mp(self, ctx, user: discord.User, *, message: str = None):
         await ctx.message.delete()
-        await user.send(message)
 
-        embed=discord.Embed(title="Message Privé!", description=f"Message envoyé à **{user.name}#{user.discriminator}**", color=discord.Color.gold())
+        files = ctx.message.attachments
+        if files:
+            for file in files:
+                await user.send(file=await file.to_file())
+
+        if message:
+            await user.send(message)
+
+        # Message d'information
+        embed = discord.Embed(title="Message Privé Envoyé!", description=f"Message envoyé à **{user.name}#{user.discriminator}**", color=discord.Color.gold())
         embed.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
         embed.set_footer(text=Help.version1)
-    
+
         await ctx.send(embed=embed, delete_after=10)
+
+
+        
         
 
-    @commands.command(aliases=["repeat1"])
-    async def say1(self, ctx, destination: typing.Union[discord.TextChannel, discord.Member, str], *, message):
+    @commands.command(aliases=["repeat"])
+    async def say(self, ctx, destination: typing.Union[discord.TextChannel, discord.Member, str], *, message=None):
         await ctx.message.delete()
 
         if isinstance(destination, str):
@@ -113,21 +117,28 @@ class utility(commands.Cog):
                     await ctx.send("Salon invalide spécifié.")
                     return
             else:
-                embed1=discord.Embed(title="Message Non Envoyé!", description="Format de mention de salon incorrect.", color=discord.Color.red())
+                embed1 = discord.Embed(title="Message Non Envoyé!", description="Format de mention de salon incorrect.", color=discord.Color.red())
                 embed1.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
                 embed1.set_footer(text=Help.version1)
 
-                await ctx.send(embed1=embed1, delete_after=10)
+                await ctx.send(embed=embed1, delete_after=10)
                 return
 
-        
-        await destination.send(message)
+        # Vérifiez si des fichiers sont attachés au message
+        if ctx.message.attachments:
+            files = [await attachment.to_file() for attachment in ctx.message.attachments]
+        else:
+            files = []
 
-        embed=discord.Embed(title="Message Envoyé!", description=f"Message envoyé dans {destination.mention}" if isinstance(destination, discord.TextChannel) else f"Message envoyé à {destination.name}#{destination.discriminator}", color=discord.Color.green())
+        await destination.send(message, files=files)
+
+        # Ajouter un message d'information
+        embed = discord.Embed(title="Message Envoyé!", description=f"Message envoyé à {destination.mention}", color=discord.Color.green())
         embed.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
         embed.set_footer(text=Help.version1)
-
         await ctx.send(embed=embed, delete_after=10)
+
+
 
 
 
@@ -143,7 +154,7 @@ class utility(commands.Cog):
             # Envoie d'un message global indiquant que la suppression des DMs est en cours
             embed = discord.Embed(title="Suppression des messages privés en cours...", color=discord.Color.yellow())
             embed.set_footer(text=Help.version1)
-            status_msg = await ctx.send(embed=embed)
+            status_msg = await ctx.send(embed=embed, delete_after=10)
 
             tasks = []
             for member in ctx.guild.members:

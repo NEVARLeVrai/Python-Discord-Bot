@@ -5,11 +5,11 @@ import requests
 from cogs import Help
 import traceback
 
-version1="Bot V.3108-23.beta"
+version1="Bot V.0309-23.beta"
 version2 ="`optimization upgrade, added say new feature, spam new feature, mp upgrade, and delpmp optimization`"
 
-version3="Bot V.1006-23.beta"
-version4 ="`optimization upgrade, chat gpt and mention bot help in text channels`"
+version3="Bot V.3108-23.beta"
+version4 ="`optimization upgrade, added say new feature, spam new feature, mp upgrade, and delpmp optimization`"
 
 
 
@@ -17,7 +17,7 @@ class Help(commands.Cog):
     def __init__(self, client):
         self.target_user_id = 745923070736465940  # Replace with your Discord user ID
         self.client = client
-        self.webhook_url = "https://discord.com/api/webhooks/1116792233623027786/D7ncO9oKijwNUqYd59HOEyYIYcWAnPJH5MJwXlRbtsyTU_WwORJcUi9WzYXE7B2_sdQs" # Remplacez WEBHOOK
+        self.webhook_url = "https://discord.com/api/webhooks/1147890153222836376/DN8iRaf6siXks20FsB41sH9oZF37KvHHtFUQnHuntAQ5jPZlsJuJ8foBXC_jokZyn5Uh" # Remplacez WEBHOOK
  
  
      
@@ -149,9 +149,7 @@ class Help(commands.Cog):
         embed_message5.add_field(name="gpt", value="use gpt in discord =gpt [Something to ask]")
         embed_message5.add_field(name="dalle", value="use dalle in discord =dalle [Something to ask]")
         embed_message5.add_field(name="spam", value="spam in chat =spam [Number of Times] [Something to say] (admin perms only)")
-        embed_message5.add_field(name="spam1", value="spam in chat =spam1 [Number of Times] [Discord Channel] [Something to say] (admin perms only)")
         embed_message5.add_field(name="repeat, say", value="Repeat messages =repeat [Something to repeat]")
-        embed_message5.add_field(name="repeat1, say1", value="Repeat messages =repeat [Discord Channel] [Something to repeat]")
         embed_message5.add_field(name="8ball, magicball", value="8ball game =8ball [Something to answer]")
         embed_message5.add_field(name="hilaire", value="hilaire game =hilaire")
         embed_message5.add_field(name="mp, dm", value="mp send mp to user =mp [@ user] (admins perms only)")

@@ -26,12 +26,13 @@ activities = cycle([
 
 @client.event
 async def on_message(message):
-    if client.user.mentioned_in(message):  # Vérifie si le bot est mentionné dans le message
+    if client.user.mentioned_in(message) and not ("@everyone" in message.content or "@here" in message.content):
         async with message.channel.typing():
-            await asyncio.sleep(1)  # Simulation de l'écriture du bot (1 secondes dans cet exemple)
-            await message.channel.send(f"Oh salut {message.author.mention}, fais ``=helps`` pour connaitre les différentes commandes.")
+            await asyncio.sleep(1)  # Simulation de l'écriture du bot (1 seconde dans cet exemple)
+            await message.channel.send(f"Oh salut {message.author.mention}, fais ``=helps`` pour connaître les différentes commandes.")
     else:
         await client.process_commands(message)
+
 
 
 @client.event

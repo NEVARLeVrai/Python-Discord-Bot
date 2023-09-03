@@ -86,26 +86,11 @@ class Mods(commands.Cog):
         
         await ctx.send(embed=conf_embed)
         
-    @commands.command(name='spam')
-    @commands.has_permissions(administrator=True)
-    async def spam(self, ctx, amount:int, *, message):
-        await ctx.message.delete()
-        max_amount = 200
-        if amount > max_amount:
-            await ctx.send(f"Le nombre maximum de messages que vous pouvez envoyer est de **{max_amount}**.")
-            amount = max_amount
-        sent_messages = 0
-        while sent_messages < amount:
-            if sent_messages >= max_amount:
-                break
-            await ctx.send(message)
-            sent_messages += 1
-            await asyncio.sleep(0.5) # Attendre une seconde entre chaque envoi de message
             
 
-    @commands.command(name='spam1')
+    @commands.command(name='spam')
     @commands.has_permissions(administrator=True)
-    async def spam1(self, ctx, amount: int, destination: typing.Union[discord.TextChannel, str], *, message):
+    async def spam(self, ctx, amount: int, destination: typing.Union[discord.TextChannel, str], *, message=None):
         await ctx.message.delete()
         
         if isinstance(destination, str):
@@ -116,7 +101,7 @@ class Mods(commands.Cog):
                     await ctx.send("Salon invalide spécifié.")
                     return
             else:
-                embed1=discord.Embed(title="Spam Non Envoyé!", description="Format de mention de salon incorrect.", color=discord.Color.red())
+                embed1 = discord.Embed(title="Spam Non Envoyé!", description="Format de mention de salon incorrect.", color=discord.Color.red())
                 embed1.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
                 embed1.set_footer(text=Help.version1)
 
@@ -128,8 +113,13 @@ class Mods(commands.Cog):
             await ctx.send(f"Le nombre maximum de messages que vous pouvez envoyer est de **{max_amount}**.")
             amount = max_amount
         
-        
-        embed=discord.Embed(title="Spam Envoyé!", description=f"Spam envoyé de {amount} message(s) dans {destination.mention}" if isinstance(destination, discord.TextChannel) else f"Message envoyé à {destination.name}#{destination.discriminator}", color=discord.Color.green())
+        # Vérifiez si des fichiers sont attachés au message
+        if ctx.message.attachments:
+            files = [await attachment.to_file() for attachment in ctx.message.attachments]
+        else:
+            files = []
+
+        embed = discord.Embed(title="Spam Envoyé!", description=f"Spam envoyé de {amount} message(s) dans {destination.mention}" if isinstance(destination, discord.TextChannel) else f"Message envoyé à {destination.name}#{destination.discriminator}", color=discord.Color.green())
         embed.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
         embed.set_footer(text=Help.version1)
 
@@ -139,9 +129,10 @@ class Mods(commands.Cog):
         while sent_messages < amount:
             if sent_messages >= max_amount:
                 break
-            await destination.send(message)
+            await destination.send(message, files=files)
             sent_messages += 1
             await asyncio.sleep(0.5)  # Attendre une seconde entre chaque envoi de message
+
             
 
 
