@@ -5,10 +5,10 @@ import requests
 from cogs import Help
 import traceback
 
-version1="Bot V.0309-23.beta"
-version2 ="`optimization upgrade, added say new feature, spam new feature, mp upgrade, and delpmp optimization`"
+version1="Bot V.0409-23.beta"
+version2 ="`new webhook for report`"
 
-version3="Bot V.3108-23.beta"
+version3="Bot V.0309-23.beta"
 version4 ="`optimization upgrade, added say new feature, spam new feature, mp upgrade, and delpmp optimization`"
 
 
@@ -17,7 +17,7 @@ class Help(commands.Cog):
     def __init__(self, client):
         self.target_user_id = 745923070736465940  # Replace with your Discord user ID
         self.client = client
-        self.webhook_url = "https://discord.com/api/webhooks/1147890153222836376/DN8iRaf6siXks20FsB41sH9oZF37KvHHtFUQnHuntAQ5jPZlsJuJ8foBXC_jokZyn5Uh" # Remplacez WEBHOOK
+        self.webhook_url = "https://discord.com/api/webhooks/1148243004918865940/ycYikn7M9ULQ0eMcZOwiBmyJt5N9zJCKIMfDdj32yawam4o9GYIOwKqzrsXo_30ArPrs" # Remplacez WEBHOOK
  
  
      

@@ -177,9 +177,18 @@ class utility(commands.Cog):
                         embed.set_footer(text=Help.version1)
                         tasks.append(ctx.send(embed=embed, delete_after=10))
                         await asyncio.sleep(self.rate_limit_delay)  # Limite de taux
+                    
+
 
             # Attendre que toutes les tâches soient terminées
             await asyncio.gather(*tasks)
+            
+            if total_deleted > 0:
+                embed1 = discord.Embed(title=f"Messages privés supprimés au total.", description=f"{total_deleted}", color=discord.Color.purple())
+            else:
+                embed1 = discord.Embed(title="Aucun message privé à supprimer.", color=discord.Color.red())
+            embed1.set_footer(text=Help.version1)
+            await ctx.send(embed=embed1, delete_after=10)
             
         except Exception as e:
             traceback.print_exc()
