@@ -4,9 +4,10 @@ import io
 import requests
 from cogs import Help
 import traceback
+from datetime import datetime
 
 version1="Bot V.0409-23.beta"
-version2 ="`new webhook for report`"
+version2 ="`new webhook for report and fix`"
 
 version3="Bot V.0309-23.beta"
 version4 ="`optimization upgrade, added say new feature, spam new feature, mp upgrade, and delpmp optimization`"
@@ -25,21 +26,36 @@ class Help(commands.Cog):
     async def on_ready(self):
         print("Help.py is ready")
         
+
+
     @commands.command(name="report")
     async def report(self, ctx, *, message: str):
         """Signaler un bug"""
         if isinstance(ctx.channel, discord.TextChannel):
             await ctx.message.delete()
             
+        ticket_number = datetime.now().strftime("%d%m%Y")  # Créez un numéro de ticket basé sur la date et l'heure
         data = {
-            "content": f"**Bug signalé !**\n\nPar: **{ctx.author.name}#{ctx.author.discriminator}**\nID: **{ctx.author.id}**\nMention: {ctx.author.mention}\nContenu: {message}\n\n**{version1}**"
+            "content": f"**Bug signalé !**\n\nTicket: **#{ticket_number}{ctx.author.name}**\nPar: **{ctx.author.name}**\nID: **{ctx.author.id}**\nMention: {ctx.author.mention}\n\nContenu: {message}\n\n**{version1}**"
         }
         headers = {
             "Content-Type": "application/json"
         }
         response = requests.post(self.webhook_url, json=data, headers=headers)
+        
         if response.status_code == 204:
+            # Envoyer un message à l'utilisateur avec le numéro de ticket
+            user = ctx.author
+            embedc2 = discord.Embed(title="Signalement", description="Votre rapport de bug a été enregistré avec succès.", color=discord.Color.green())
+            embedc2.add_field(name="",value=f"Ticket : **#{ticket_number}{ctx.author.name}**", inline=False)
+            embedc2.add_field(name="",value="Nous allons le corriger dès que possible!", inline=False)
+            embedc2.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+            embedc2.set_footer(text=version1)
+            await user.send(embed=embedc2)
+            
+            # Envoyer un message de confirmation dans le canal actuel
             embedc = discord.Embed(title="Signalement", description="Merci d'avoir signalé ce bug.", color=discord.Color.green())
+            embedc.add_field(name="",value=f"Ticket : **#{ticket_number}{ctx.author.name}**", inline=False)
             embedc.add_field(name="",value="Nous allons le corriger dès que possible.", inline=False)
             embedc.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
             embedc.set_footer(text=version1)
@@ -50,8 +66,8 @@ class Help(commands.Cog):
             embedc1.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
             embedc1.set_footer(text=version1)
             await ctx.send(embed=embedc1, delete_after=5)
-                     
-        
+
+
         
     @commands.command()
     async def helps(self, ctx):
