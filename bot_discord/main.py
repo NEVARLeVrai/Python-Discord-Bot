@@ -99,10 +99,11 @@ async def stop(ctx):
 try:
     asyncio.run(load())
     print("")
-    with open("C:/Users/danie/Mon Drive/token.txt", "r") as f:
+    with open("C:/Users/danie/Mon Drive/Bot Python Discord/token.txt", "r") as f:
         token = f.read().strip()
     client.run(token)
 
 except Exception as e:
+    asyncio.sleep(10)
     print("Arrêté impossible de lancer le bot")
     traceback.print_exc()

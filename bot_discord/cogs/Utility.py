@@ -8,12 +8,14 @@ import traceback
 import openai
 import datetime
 import typing
+import asyncio
+import re
 
 class utility(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.reponse_en_cours = False  # Variable de verrouillage initialement à False
-        with open("C:/Users/danie/Mon Drive/tokengpt.txt", "r") as f:
+        with open("C:/Users/danie/Mon Drive/Bot Python Discord/tokengpt.txt", "r") as f:
             GPT_API_KEY = f.read().strip()
         openai.api_key = GPT_API_KEY
         self.rate_limit_delay = 1  # Délai en secondes entre chaque requête (1 seconde dans cet exemple)
@@ -80,30 +82,6 @@ class utility(commands.Cog):
                 embed3.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
                 embed3.set_footer(text=Help.version1)
                 await ctx.send(embed=embed3, delete_after=5)
-
-    @commands.command(aliases=["dm"])
-    @commands.has_permissions(administrator=True)
-    async def mp(self, ctx, user: discord.User, *, message: str = None):
-        await ctx.message.delete()
-
-        files = ctx.message.attachments
-        if files:
-            for file in files:
-                await user.send(file=await file.to_file())
-
-        if message:
-            await user.send(message)
-
-        # Message d'information
-        embed = discord.Embed(title="Message Privé Envoyé!", description=f"Message envoyé à **{user.name}#{user.discriminator}**", color=discord.Color.gold())
-        embed.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
-        embed.set_footer(text=Help.version1)
-
-        await ctx.send(embed=embed, delete_after=10)
-
-
-        
-        
 
     @commands.command(aliases=["repeat"])
     async def say(self, ctx, destination: typing.Union[discord.TextChannel, discord.Member, str], *, message=None):
@@ -266,7 +244,7 @@ class utility(commands.Cog):
                 response_with_mention = f"{ctx.author.mention}\n{response}"  # Ajouter la mention à la réponse
             await ctx.send(response_with_mention)
 
-            with open("C:/Users/danie/Mon Drive/gptlogs.txt", "a") as f:
+            with open("C:/Users/danie/Mon Drive/Bot Python Discord/gptlogs.txt", "a") as f:
                 current_time = datetime.datetime.now()
                 f.write(f"Date: {current_time.strftime('%Y-%m-%d')}\n")
                 f.write(f"Heure: {current_time.strftime('%H:%M:%S')}\n")
@@ -285,7 +263,7 @@ class utility(commands.Cog):
             max_tokens=1000,
             n=1,
             stop=None,
-            temperature=0.7
+            temperature=1
         )
         bot_response = response.choices[0].text.strip()
         print("\n\nChat GPT:")
@@ -317,7 +295,7 @@ class utility(commands.Cog):
                 response_with_mention = f"{ctx.author.mention}\n{response}"  # Ajouter la mention à la réponse
             await ctx.send(response_with_mention)
 
-            with open("C:/Users/danie/Mon Drive/dallelogs.txt", "a") as f:
+            with open("C:/Users/danie/Mon Drive/Bot Python Discord/dallelogs.txt", "a") as f:
                 current_time = datetime.datetime.now()
                 f.write(f"Date: {current_time.strftime('%Y-%m-%d')}\n")
                 f.write(f"Heure: {current_time.strftime('%H:%M:%S')}\n")
@@ -333,7 +311,7 @@ class utility(commands.Cog):
         response = openai.Image.create(
         prompt=question,
         n=1,
-        size="1024x1024"
+        size="512x512"
         )
         bot_response = response['data'][0]['url']
         print("\n\nDall-E:")
@@ -342,5 +320,43 @@ class utility(commands.Cog):
         return bot_response
         
 
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if 'tiktok.com' in message.content:
+            await self.process_tiktok_message(message)
+        elif 'twitter.com' in message.content:
+            await self.process_twitter_message(message)
+        elif 'x.com' in message.content:
+            await self.process_x_message(message)
+
+    async def process_tiktok_message(self, message):
+        tiktok_link = re.search(r'(https?://(?:\S+\.)?tiktok\.com/\S+)', message.content)
+        if tiktok_link:
+            original_link = tiktok_link.group(0)
+            modified_link = original_link.replace('tiktok.com', 'vxtiktok.com')
+            await self.send_modified_message(message, modified_link)
+
+
+
+    async def process_twitter_message(self, message):
+        twitter_link = re.search(r'(https?://(?:www\.)?twitter\.com/\S+)', message.content)
+        if twitter_link:
+            original_link = twitter_link.group(0)
+            modified_link = original_link.replace('twitter.com', 'fxtwitter.com')
+            await self.send_modified_message(message, modified_link)
+
+    async def process_x_message(self, message):
+        x_link = re.search(r'(https?://(?:www\.)?x\.com/\S+)', message.content)
+        if x_link:
+            original_link = x_link.group(0)
+            modified_link = original_link.replace('x.com', 'fxtwitter.com')
+            await self.send_modified_message(message, modified_link)
+
+    async def send_modified_message(self, message, modified_link):
+        await message.delete()
+        async with message.channel.typing():
+            await asyncio.sleep(1)
+            await message.channel.send(f"{message.author.mention}\n{modified_link}")
+                    
 async def setup(client):
     await client.add_cog(utility(client))

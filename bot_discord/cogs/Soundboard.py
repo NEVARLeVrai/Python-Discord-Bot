@@ -79,7 +79,7 @@ class Soundboard(commands.Cog):
                         sound_name = self.sound_files[sound_num-1]
                         file_path = f"./Sounds/{sound_name}"
                         if os.path.isfile(file_path):
-                            source = discord.FFmpegPCMAudio(file_path, executable='C:/ProgramData/chocolatey/lib/ffmpeg-full/tools/ffmpeg/bin/ffmpeg.exe')
+                            source = discord.FFmpegPCMAudio(file_path, executable='C:/Users/Danie/Mon Drive/Bot Python Discord/ffmpeg-master-latest-win64-gpl/bin/ffmpeg.exe')
                             self.voice_client.play(source)
                             embed90 = discord.Embed(title= "SoundBoard Random", description=f"Joue {sound_name}", color=discord.Color.green())
                             embed90.set_footer(text=Help.version1)
@@ -208,7 +208,7 @@ class Soundboard(commands.Cog):
             embed16 = discord.Embed(title= "SoundBoard Play", description=f"Pour jouer un son, utilisez la commande avec un numéro de son valide. Exemple : `=splay 1`", color=discord.Color.blue())
             embed16.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
             embed16.set_footer(text=Help.version1)
-            source = discord.FFmpegPCMAudio(file_path2, executable='C:/ProgramData/chocolatey/lib/ffmpeg-full/tools/ffmpeg/bin/ffmpeg.exe')
+            source = discord.FFmpegPCMAudio(file_path2, executable='C:/Users/Danie/Mon Drive/Bot Python Discord/ffmpeg-master-latest-win64-gpl/bin/ffmpeg.exe')
             self.voice_client.play(source)
             return await ctx.send(embed = embed16, delete_after=5)
 
@@ -230,7 +230,7 @@ class Soundboard(commands.Cog):
         embed9.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
         embed9.set_footer(text=Help.version1)
         await ctx.send(embed = embed9, delete_after=10)
-        source = discord.FFmpegPCMAudio(file_path, executable='C:/ProgramData/chocolatey/lib/ffmpeg-full/tools/ffmpeg/bin/ffmpeg.exe')
+        source = discord.FFmpegPCMAudio(file_path, executable='C:/Users/Danie/Mon Drive/Bot Python Discord/ffmpeg-master-latest-win64-gpl/bin/ffmpeg.exe')
         self.voice_client.play(source)
     
         # Exécuter la suite si le fichier "Outro.mp3" a été joué

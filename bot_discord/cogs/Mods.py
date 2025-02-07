@@ -91,7 +91,6 @@ class Mods(commands.Cog):
     @commands.command(name='spam')
     @commands.has_permissions(administrator=True)
     async def spam(self, ctx, amount: int, destination: typing.Union[discord.TextChannel, str], *, message=None):
-        await ctx.message.delete()
         
         if isinstance(destination, str):
             if destination.startswith("<#") and destination.endswith(">"):
@@ -122,8 +121,9 @@ class Mods(commands.Cog):
         embed = discord.Embed(title="Spam Envoyé!", description=f"Spam envoyé de {amount} message(s) dans {destination.mention}" if isinstance(destination, discord.TextChannel) else f"Message envoyé à {destination.name}#{destination.discriminator}", color=discord.Color.green())
         embed.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
         embed.set_footer(text=Help.version1)
-
+        
         await ctx.send(embed=embed, delete_after=10)
+
 
         sent_messages = 0
         while sent_messages < amount:
@@ -179,6 +179,51 @@ class Mods(commands.Cog):
         embed6.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
         embed6.set_footer(text=Help.version1)
         await ctx.send(embed=embed6, delete_after=5)
+
+    @commands.command(name='giverole')
+    @commands.is_owner()
+    async def giverole(self, ctx, utilisateur: discord.Member, role: discord.Role):
+        await ctx.message.delete()
+        try:
+            await utilisateur.add_roles(role)
+            conf_embed = discord.Embed(title= "Réussi!", description="", color=discord.Color.random())
+            conf_embed.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+            conf_embed.add_field(name=f"Le rôle **@{role.name}**", value=f"a été attribué à {utilisateur.mention}", inline=False)
+            conf_embed.set_footer(text=Help.version1)
+            await ctx.send(embed=conf_embed, delete_after=10)
+            
+        except discord.Forbidden:
+            conf_embed1 = discord.Embed(title= "Erreur !", description="", color=discord.Color.red())
+            conf_embed1.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+            conf_embed1.add_field(name="Je n'ai pas les permissions nécessaires pour attribuer ce rôle", value=" ", inline=False)
+            conf_embed1.set_footer(text=Help.version1)
+            await ctx.send(embed=conf_embed1, delete_after=10)
+            
+        except discord.HTTPException as e:
+            await ctx.send(f"Une erreur s'est produite : {e}")
+                
+    @commands.command(name='removerole')
+    @commands.is_owner()
+    async def removerole(self, ctx, utilisateur: discord.Member, role: discord.Role):
+        await ctx.message.delete()
+        try:
+            await utilisateur.remove_roles(role)
+            conf_embed = discord.Embed(title= "Réussi!", description="", color=discord.Color.random())
+            conf_embed.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+            conf_embed.add_field(name=f"Le rôle **@{role.name}**", value=f" a été enlevé à {utilisateur.mention}", inline=False)
+            conf_embed.set_footer(text=Help.version1)
+            await ctx.send(embed=conf_embed, delete_after=10)
+    
+        except discord.Forbidden:
+            conf_embed1 = discord.Embed(title= "Erreur !", description="", color=discord.Color.red())
+            conf_embed1.set_author(name=f"Demandé par {ctx.author.name}", icon_url=ctx.author.avatar)
+            conf_embed1.add_field(name="Je n'ai pas les permissions nécessaires pour enlever ce rôle", value=" ", inline=False)
+            conf_embed1.set_footer(text=Help.version1)
+            await ctx.send(embed=conf_embed1, delete_after=10)
+
+        except discord.HTTPException as e:
+            await ctx.send(f"Une erreur s'est produite : {e}")
+
 
     @cleanraidsimple.error
     async def cleanraidsimple_error(self, ctx, error):

@@ -6,11 +6,11 @@ from cogs import Help
 import traceback
 from datetime import datetime
 
-version1="Bot V.0409-23.beta"
-version2 ="`new webhook for report and fix`"
+version1="Bot V.0201-24.omega"
+version2 ="`optimization, added give and remove role commands and Happy New Year ❤`"
 
-version3="Bot V.0309-23.beta"
-version4 ="`optimization upgrade, added say new feature, spam new feature, mp upgrade, and delpmp optimization`"
+version3="Bot V.2912-23.beta"
+version4 ="`optimization and added link conversion for tiktok and twiiter(X)`"
 
 
 
@@ -149,6 +149,8 @@ class Help(commands.Cog):
         embed_message4.add_field(name="kick", value="kick members =kick [@ user or ID] (kick perms only)")
         embed_message4.add_field(name="ban", value="ban members =ban [@ user or ID] (ban perms only)")
         embed_message4.add_field(name="unban", value="unban members =unban [@ user or ID] (ban perms only)")
+        embed_message4.add_field(name="giverole", value="give a role to a members =giverole [@ user or ID] [@ role or ID]  (admins perms only)")
+        embed_message4.add_field(name="removerole", value="removerole a role to a members =removerole [@ user or ID] [@ role or ID] (admins perms only)")
         
         embed_message5 = discord.Embed(
         title="Helps Utility",
@@ -168,7 +170,6 @@ class Help(commands.Cog):
         embed_message5.add_field(name="repeat, say", value="Repeat messages =repeat [Something to repeat]")
         embed_message5.add_field(name="8ball, magicball", value="8ball game =8ball [Something to answer]")
         embed_message5.add_field(name="hilaire", value="hilaire game =hilaire")
-        embed_message5.add_field(name="mp, dm", value="mp send mp to user =mp [@ user] (admins perms only)")
         embed_message5.add_field(name="deldms, delmp", value="deldms clear dms with bot =deldms (admin perms only)")
         
         embed_message6 = discord.Embed(
